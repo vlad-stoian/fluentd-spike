@@ -30,8 +30,28 @@ instance_groups:
         </source>
 
         <match **>
-          @type stdout
+          @type exec_filter
+          command /var/vcap/packages/ruby/bin/ruby /tmp/enveloper.rb
+          @label @stdout
+          tag enveloped
+          <format>
+            @type json
+          </format>
+          <parse>
+            @type json
+          </parse>
+          <buffer>
+            @type file
+            path /tmp/fluently.buffer
+            flush_interval 10s
+          </buffer>
         </match>
+
+        <label @stdout>
+          <match enveloped>
+            @type stdout
+          </match>
+        </label>
   vm_type: micro
   stemcell: default
   networks:
