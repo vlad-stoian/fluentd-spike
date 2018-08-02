@@ -2,5 +2,7 @@
 
 set -e
 
-kubectl delete -f deployment.yml
-kubectl apply -f deployment.yml
+# bosh -d fluentd deploy fluentd-on-bosh.yml
+
+kubectl delete -f fluent-bit-on-k8s-deployment.yml
+kubectl apply -f fluent-bit-on-k8s-deployment.yml

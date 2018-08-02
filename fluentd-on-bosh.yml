@@ -1,0 +1,43 @@
+---
+name: fluentd-test
+
+releases:
+- {name: fluentd, version: latest}
+
+stemcells:
+- alias: default
+  os: ubuntu-trusty
+  version: latest
+
+instance_groups:
+- name: fluentd
+  instances: 1
+  azs: [europe-west1-b]
+  jobs:
+  - name: fluentd
+    release: fluentd
+    properties:
+      config: |
+        <system>
+          log_level info
+        </system>
+
+        <source>
+          @type dummy
+          tag  dummy
+          dummy {"hello":"world"}
+        </source>
+
+        <match **>
+          @type stdout
+        </match>
+  vm_type: micro
+  stemcell: default
+  networks:
+  - name: hughson-services-subnet
+
+update:
+  canaries: 1
+  max_in_flight: 3
+  canary_watch_time: 15000-30000
+  update_watch_time: 15000-300000
