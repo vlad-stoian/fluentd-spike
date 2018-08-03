@@ -48,11 +48,24 @@ instance_groups:
         </match>
 
         <label @stdout>
+
           <match enveloped>
-            @type stdout
+            @type copy
+            <store>
+              @type exec
+              command /var/vcap/packages/ruby/bin/ruby /tmp/sender.rb
+              <format>
+                @type json
+              </format>
+            </store>
+            <store>
+              @type stdout
+            </store>
           </match>
         </label>
   vm_type: micro
+  vm_extensions:
+  - public_ip
   stemcell: default
   networks:
   - name: hughson-services-subnet
