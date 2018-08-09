@@ -51,7 +51,7 @@ data:
         HTTP_Port     2020
     [INPUT]
         Name          dummy
-        Tag           pks-agent
+        Tag           pks-agent.poop
         Dummy         { "cluster_id": "c605c22d-169c-41bc-b108-c327f225b307", "number_of_workers": "1", "plan_id": "8A0E21A8-8072-4D80-B365-D1F502085560", "plan_name": "minimum", "timestamp": "2018-07-19 04:35:13.391 UTC", "user_id": "1324676999ba855eab15118db74837089eced8c5b3ab39837b8fd1bf829861ac" }
     [OUTPUT]
         Name  stdout
@@ -61,3 +61,32 @@ data:
         Match         *
         Host          10.0.8.12
         Port          24224
+        tls           on
+        tls.verify    on
+        tls.debug     4
+        tls.ca_file   /fluent-bit/etc/tls_ca.crt
+        tls.crt_file  /fluent-bit/etc/tls_ca.crt
+        Shared_Key    lol
+        Self_Hostname 10.0.8.12
+
+
+  tls_ca.crt: |
+    -----BEGIN CERTIFICATE-----
+    MIIDHjCCAgagAwIBAgIRAOqovYHnkjDG3QXfAMlZeYwwDQYJKoZIhvcNAQELBQAw
+    ODEMMAoGA1UEBhMDVVNBMRYwFAYDVQQKEw1DbG91ZCBGb3VuZHJ5MRAwDgYDVQQD
+    EwdmbHVlbnRkMB4XDTE4MDgwMzE0NTU0OFoXDTE5MDgwMzE0NTU0OFowODEMMAoG
+    A1UEBhMDVVNBMRYwFAYDVQQKEw1DbG91ZCBGb3VuZHJ5MRAwDgYDVQQDEwdmbHVl
+    bnRkMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsaLiITmi2XtjdNAG
+    UXgO7X8LIyD1eD3M4iF4wnhPbjR1ihhm66tzqd+3qDOo4ZsV0a40X1ffIEr4AqzP
+    R9CQKce6YVadYyXcz3zBJd3Hw02xoyeD3I44cO73oL1MTuidYYcMQ0i2S3XpgSmT
+    zzK2mYurPixpsv+g6kudUJbxaDcdeKEd1T4QCl4xGDQt5bdCR3w/4FMs7BN+rctw
+    3NA9uf98Z20CEyORvTi/wxgAzAgjoOTMiaxqSK4Jp42GcMA1fucDE6Gviz2G163t
+    FdNF4nW2yYFBlZKgn7Hy8xX/UWLMXHYjbwe1r62C05vZb7RYKXpQgh62FaJEIm/2
+    VDfhTwIDAQABoyMwITAOBgNVHQ8BAf8EBAMCAQYwDwYDVR0TAQH/BAUwAwEB/zAN
+    BgkqhkiG9w0BAQsFAAOCAQEAPnLp1S+KiYl1x/GOwh4tQhWk1Pe5bfqIBLNTyyXs
+    hNtuOG1BfPP23X4+10bdh2gX4owWNQ+wfrdX+Z9oY7Gr/erZvQPFdRi/9UmipWn9
+    gmcRX32jeWWulq0B8rAw+21ztp7oSkvHnAp/p6P/vSyCWC4QMmZjgCUGcsVEg3/U
+    l7q0K6CrsQwEG8otFUEdd/35zLd8/KHxmkf7zyCdD+9xYQUFc9UzZb94IxwutTco
+    ydTFmjwqPve29UtpzLxwHlqbgvFwA4pldVkn6hv2Toay0HnyMte0w88a2S5h7sBe
+    ZoIGNbluQBRG8UTCjCNuE8L45ZMIknh9zHMpCkCN+E7V5Q==
+    -----END CERTIFICATE-----

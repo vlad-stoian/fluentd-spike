@@ -18,18 +18,27 @@ instance_groups:
     release: fluentd
     properties:
       bosh_dns_name: fluentd.pks.internal
+      tls: ((fluentd_tls))
       config: |
         <system>
-          log_level info
+          log_level debug
         </system>
 
         <source>
           @type forward
           port 24224
           bind 0.0.0.0
+            <transport tls>
+              cert_path /var/vcap/jobs/fluentd/certs/tls_certificate
+              private_key_path /var/vcap/jobs/fluentd/certs/tls_private_key
+            </transport>
+            <security>
+              self_hostname fluentd
+              shared_key lol
+            </security>
         </source>
 
-        <match **>
+        <match pks-agent.poop>
           @type exec_filter
           command /var/vcap/packages/ruby/bin/ruby /tmp/enveloper.rb
           @label @stdout
@@ -75,3 +84,19 @@ update:
   max_in_flight: 3
   canary_watch_time: 15000-30000
   update_watch_time: 15000-300000
+
+
+
+
+variables:
+- name: fluentd_ca
+  type: certificate
+  options:
+    is_ca: true
+    common_name: fluentd
+- name: fluentd_tls
+  type: certificate
+  options:
+    ca: fluentd_ca
+    common_name: 10.0.8.12
+    alternative_names: [ 10.0.8.12 ]
