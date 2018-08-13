@@ -50,9 +50,8 @@ data:
         HTTP_Listen   0.0.0.0
         HTTP_Port     2020
     [INPUT]
-        Name          dummy
-        Tag           pks-agent
-        Dummy         { "cluster_id": "c605c22d-169c-41bc-b108-c327f225b307", "number_of_workers": "1", "plan_id": "8A0E21A8-8072-4D80-B365-D1F502085560", "plan_name": "minimum", "timestamp": "2018-07-19 04:35:13.391 UTC", "user_id": "1324676999ba855eab15118db74837089eced8c5b3ab39837b8fd1bf829861ac" }
+        Name          mem
+        Tag           cfcr-agent
     [OUTPUT]
         Name  stdout
         Match *

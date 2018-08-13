@@ -1,11 +1,13 @@
 require 'json'
 
 begin
+  STDOUT.sync = true
+  
   while line = STDIN.gets # continue to read a event from stdin
     line.chomp!
 
     # Input format depends on exec_filter's in_format setting
-    json = JSON.parse(line)
+    input_json = JSON.parse(line)
 
     # main processing. You can do anything, mutate record, access to database and etc.
 
@@ -15,10 +17,7 @@ begin
         "cloud_provider" => "GCP",
         "vcenter_id" => "1234-abcd"
       },
-      'payload' => {
-        "eventType" => "create_cluster",
-        "data" => json
-      }
+      'payload' => input_json
     }
 
     # Write data to stdout. Output format depends on exec_filter's out_format setting

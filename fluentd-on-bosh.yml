@@ -17,6 +17,9 @@ instance_groups:
   - name: fluentd
     release: fluentd
     properties:
+      tls:
+        certificate: "--IGNORED--"
+        private_key: "--IGNORED--"
       bosh_dns_name: fluentd.pks.internal
       config: |
         <system>
@@ -29,7 +32,13 @@ instance_groups:
           bind 0.0.0.0
         </source>
 
-        <match **>
+        <source>
+          @type http
+          port 8888
+          bind 0.0.0.0
+        </source>
+
+        <match pks-api cfcr-agent>
           @type exec_filter
           command /var/vcap/packages/ruby/bin/ruby /tmp/enveloper.rb
           @label @stdout
@@ -40,29 +49,34 @@ instance_groups:
           <parse>
             @type json
           </parse>
+
           <buffer>
             @type file
-            path /tmp/fluently.buffer
-            flush_interval 10s
+            path /tmp/fluentd_enveloper.buffer
+            flush_mode immediate
+            chunk_limit_records 1
           </buffer>
         </match>
 
         <label @stdout>
-
-          <match enveloped>
-            @type copy
-            <store>
-              @type exec
-              command /var/vcap/packages/ruby/bin/ruby /tmp/sender.rb
-              <format>
-                @type json
-              </format>
-            </store>
-            <store>
-              @type stdout
-            </store>
+          <match **>
+            @type exec
+            command /var/vcap/packages/ruby/bin/ruby /tmp/sender.rb
+            <format>
+              @type json
+            </format>
+            <buffer>
+              @type file
+              path /tmp/fluentd_sender.buffer
+              flush_mode immediate
+              chunk_limit_records 1
+            </buffer>
           </match>
         </label>
+
+        <match **>
+          @type stdout
+        </match>
   vm_type: micro
   vm_extensions:
   - public_ip
